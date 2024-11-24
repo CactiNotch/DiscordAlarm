@@ -17,7 +17,7 @@ module.exports = class AlarmPlugin {
       document.head.appendChild(fa);
     }
 
-    this.buttonHTML = `<button class="alarm-button" 
+    this.buttonHTML = `<div class="alarm-button" 
       aria-label="Set Alarm"
       role="button"
       data-tooltip-text="Set Alarm"
@@ -31,7 +31,7 @@ module.exports = class AlarmPlugin {
         transition: color 0.2s ease-in-out;
       ">
       <i class="fa-solid fa-bell"></i>
-    </button>`;
+    </div`;
 
     BdApi.injectCSS(
       "alarm-button-css",
