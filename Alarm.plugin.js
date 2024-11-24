@@ -28,33 +28,7 @@ module.exports = class Alarm {
       document.head.appendChild(fa);
     }
 
-    this.alarmButton = document.createElement("button");
-    this.alarmButton.innerHTML = `<i class="fa-solid fa-bell"></i>`;
-    this.alarmButton.classList.add("alarm-button");
-
-    DOM.addStyle(
-      "alarm-button-style",
-      `
-      .alarm-button {
-        color: #b5bac1;
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        margin: 0px 8px;
-        transition: color 0.2s ease-in-out;
-        scale: 1.5;
-      }
-
-      .alarm-button:hover {
-        color: #dbdee1 !important;
-      }
-    `
-    );
-
-    toolBar.prepend(this.alarmButton);
-
-    this.alarmButton.addEventListener("click", this.onAlarmButtonClick);
-    this.tooltip = UI.createTooltip(this.alarmButton, "Set Alarm", "bottom");
+    this.createAlarmButton(toolBar);
   }
 
   stop() {
@@ -63,6 +37,49 @@ module.exports = class Alarm {
       this.alarmButton.remove();
       this.alarmButton = null;
     }
-    BdApi.clearCSS("alarm-button-style");
+    DOM.removeStyle("alarm-button-style");
+  }
+
+  observer(changes) {
+    const toolBar = document.querySelector('[class*="toolbar_"]');
+    const alarmButton = document.querySelector(".alarm-button");
+    // Re-add button when Discord updates its DOM
+    if (toolBar && !alarmButton) {
+      this.createAlarmButton(toolBar);
+    }
+  }
+
+  createAlarmButton(toolBar) {
+    if (this.alarmButton) {
+      this.alarmButton.remove();
+    }
+
+    this.alarmButton = document.createElement("button");
+    this.alarmButton.innerHTML = `<i class="fa-solid fa-bell"></i>`;
+    this.alarmButton.classList.add("alarm-button");
+
+    DOM.addStyle(
+      "alarm-button-style",
+      `
+        .alarm-button {
+          color: #b5bac1;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          margin: 0px 8px;
+          transition: color 0.2s ease-in-out;
+          scale: 1.5;
+        }
+  
+        .alarm-button:hover {
+          color: #dbdee1 !important;
+        }
+      `
+    );
+
+    toolBar.prepend(this.alarmButton);
+
+    this.alarmButton.addEventListener("click", this.onAlarmButtonClick);
+    this.tooltip = UI.createTooltip(this.alarmButton, "Set Alarm", "bottom");
   }
 };
